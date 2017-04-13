@@ -1,7 +1,10 @@
 %% parametri motorja
 %clear;
-filtkonst=1.3;
+%ko=mojkont;
+static_or_dinamic=static_or_dinamic;
 % Letrika 500 W, 15 V
+naklon= naklon;
+
 
 Pn=0.5;       % kW
 Mn = 2.5;       % Nm
@@ -35,6 +38,7 @@ pp = 2;         % stevilo polovih parov
 J = 1*0.014752;     % vztrajnost
 %}
 
+
 % 4,7 kW Indramat, oznaka: "REXROTH 4,7 kW
 %{
 Un = 216;       % nazivna napetost
@@ -53,6 +57,8 @@ J = 0.019;      % vztrajnost
 % statorska casovna konstanta
 %Ts = Ls/Rs;
 % rotorska casovna konstanta
+
+
 Tr = Lr/Rr;
 
 sigmaR = (Lr-Lm)/Lm;
@@ -62,6 +68,9 @@ sigma = 1 - 1/((1+sigmaR)*(1+sigmaS));
 
 
 Lst=sigma*Ls;
+
+
+
 %% parametri za termiko
 % temperaturna prevodnost med statorjem in zrakom
 T_st_amb = 1;
@@ -104,9 +113,10 @@ omega_weak =  (((Udc*sqrt(3)/2)/(Un*sqrt(2)))/pp) * 50 *2*pi  * 0.9;
 
 Ismax=In*sqrt(2);
 Usmax=Udc;
-
+wn=Un/sqrt(Ls^2*(Imrn)^2+Lst^2*(Ismax^2-(Imrn)^2))/pp;
+nN=wn*60/2/pi;
 wb_upper_limit_field_weaking=sqrt((Ls^2+Lst^2)/(2*Lst^2*Ls^2))*Usmax/Ismax;
-wn=Udc/(sqrt(2*Imrn^2*(Ls^2-Lst^2)+(Lst*Ismax)^2));
+
 wdod=2000*2*pi/60;
 fcutoff=10000;
 taufiltra=1/(2*pi*fcutoff);
