@@ -1,9 +1,9 @@
 %% parametri motorja
 %clear;
 %ko=mojkont;
-static_or_dinamic=static_or_dinamic;
+%static_or_dinamic=static_or_dinamic;
 % Letrika 500 W, 15 V
-naklon= naklon;
+%naklon= naklon;
 
 
 Pn=0.5;       % kW
@@ -20,7 +20,7 @@ Lr = 0.002559;  % H
 Lm = 0.0024;    % H
 pp = 1;         % polov par	
 J = 0.001;
-
+ 
 
 % 3 kW Indramat AD100B
 %{
@@ -105,7 +105,7 @@ Fstikalna = 10000;
 % preklopna in vzorcna perioda
 Tstikalna = 1/Fstikalna;
 % napetost enosmernega tokokroga
-Udc = Un*sqrt(2);
+Udc = Un*sqrt(2/3*2);
 
 %% slablenje polja
 omega_weak =  (((Udc*sqrt(3)/2)/(Un*sqrt(2)))/pp) * 50 *2*pi  * 0.9;
@@ -113,9 +113,13 @@ omega_weak =  (((Udc*sqrt(3)/2)/(Un*sqrt(2)))/pp) * 50 *2*pi  * 0.9;
 
 Ismax=In*sqrt(2);
 Usmax=Udc;
-wn=Un/sqrt(Ls^2*(Imrn)^2+Lst^2*(Ismax^2-(Imrn)^2))/pp;
+
+
+wn=Udc/sqrt(Ls^2*(Imrn)^2+Lst^2*(Ismax^2-(Imrn)^2))/pp/sqrt(2);
+
+
 nN=wn*60/2/pi;
-wb_upper_limit_field_weaking=sqrt((Ls^2+Lst^2)/(2*Lst^2*Ls^2))*Usmax/Ismax;
+wb_upper_limit_field_weaking=sqrt((Ls^2+Lst^2)/(2*Lst^2*Ls^2))*Un/Ismax;
 
 wdod=2000*2*pi/60;
 fcutoff=10000;

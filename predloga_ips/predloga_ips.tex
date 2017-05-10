@@ -6,8 +6,9 @@
 \usepackage{sty/EVrevija}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usepackage{mathtools}
 \usepackage[affil-it]{authblk}
-
+\graphicspath{{./Slike/}}
 \begin{document}
 
 % naslov prispevka, lahko uporabite en linebreak \\
@@ -16,9 +17,17 @@
 \authors{Mitja Ali"c} 
 \address{E-pošta: mitja1357@gmail.com}
 
-\abstract{}
+\abstract{
+\textbf{IZHODIŠČA}. Potreba po velikem razponu vrtilne hitrosti je v sedanjosti na podro"cju vodenja pogonov zelo potrebna. Z uporabo napetostno-frekven"cnih pretvornikov se lahko generira poljubne oblike in velikosti napajalnih napetosti. Na podlagi razli"cnih tehnik in izra"cunov nastavljamo "zeljene vrednosti za pogone. V tem delu bom predstavil tehnike za regulacijo stroja v podro"cju konstantne mo"ci, pri "cemer je "zelja po "cim vi"sjem ustvarjenem navoru.
+\\
+\textbf{METODE}. Ob pregledu strokovne literature, ki je ustrezala "studiji, sem zbral primere tehnik, s katerimi asinhronski motor reguliramo v obmo"cju salbljenja polja, hkrati pa zagotovimo visoko vrednost ustvarjenega navora.
+\\
+\textbf{REZULTATI}. S simulacijami sem prikazal, da s pomo"cjo ra"zli"cnih tehnik, stroj v podro"cju slabljenja polja ustvari ra"zli"cne velikosti elektri"cnega navora.
+\\
+\textbf{ZAKLJUČEK}. Obstaja veliko pristopov, kako regulirati pogon asinhronskega motorja  v podro"cju slabljenja polja. Razli"cne tehnike se odzivajo razli"cno. S katero tehniko bo motor reguliran, je odvisno le od na"crtovalca pogona.
+}
 
-\keywords{dvoosni koordinatni sistem, magnetilni tok}
+\keywords{dvoosni koordinatni sistem, magnetilni tok, navor, slabljenje polja}
 
 % Priimki avtorjev in kratek naslov članka za tekočo glavo
 \markboth{Ali"c}{Regulacija asinhronskega motorja v slabljenju polja}
@@ -28,74 +37,85 @@
 
 % Naslov in kratek povzetek v angleščini
 \english{Control of asynchronous motor in the field weakening}
-{Mitja in english here please.}
+{\textbf{\textit{Abstract:}} {\it \textbf{BACKGROUND}. The need of large range of speed for integrated electric drives is nowadays crucial. Due to AC-AC converters, power signals could have variable amplitude or frequency. An engineer is required to set up the technique for determination of referenced values of currents and voltages.  By using different techniques, electrical drive will respond variously. In this paper I will represent some of the techniques, for setting referenced values of currents in the field weakening range. By using different techniques, torque capability is changed.
+\\
+\textbf{METHODS}.  A systematic search of bibliographic databases was performed. Crucial pieces of information were collected in this document. Few of the techniques has been simulated with Matlab.
+\\
+\textbf{RESULTS}. The results shows, by using different technique for regulation of electrical drive in field weakening range profundly influence on torque capability.
+\\
+\textbf{CONCLUSION}. Setting referenced values of stator currents, dependes of chosen technique. The technique that will be used for electrical drive, it is depending on the constructor.
+}}
 
 \section{Uvod}
 
-Kot "student fakultete za elektrotehniko na Univerzi v Ljubljani sem pri predmetu Integrirani pogonski sistemi delal na regulaciji pogona v nadnazivni hitrosti. V nadnazivnih hitrostih pogon za"cne omejevati napetostna zmo"znost napajalnega pretvornika.  Ponavadi se poslu"zimo zmanj"sevanje referen"cne vrednosti amplitude magnetnega sklepa v zra"cni rezi v obratnem razmerju s vrtilno hitrostjo. To pa nam ne zagotovi maksimalnega navora. S programskim paketom Matlab sem simuliral delovanje motorja v nadnazivnih hitrostih in pri tem preizkusil razli"cne metode.
+
+"Zelja po velikem razponu vrtilne hitrosti elektromotorjev je v sedanjem "casu zelo za"zeljena. Z uporabo napetostno-frekven"cnih pretvornikov se lahko pogone zelo dobro prilagodi bremenom, katere bo moral premagovati. Z razli"cnimi metodami se pogone lahko vodi v "sirokem obmo"cju. V obmo"cjih do nazivne hitrosti se uporablja metoda U/f \cite{servopogoni}, ki v podro"cju do nazivne hitrosti omogo"ca ustvariti konstanten navor. 
+V nadnazivnih hitrostih za"cne pogon omejevati napetostna zmo"znost napajalnega pretvornika.  Navadno se pri tej to"cki obratovanja spremeni metoda za dolo"canje "zeljenih vrednosti tokov v motor. V literaturah \cite{servopogoni},\cite{miljavc},\cite{vas} ipd. so opisane metode ki se jih je primerno poslu"ziti. Za obratovanje v nadnazivnih hitrostih je potrebno zmanj"sati vrednost magnetnega sklepa v zra"cni re"zi. Ta metoda ne zagotovi enakega navora kot v podnazivnem obmo"cju navora. V tem obmo"cju sta vrednosti napajalne napetosti in toka konstantni, zato se to obmo"cje delovanja imenuje obmo"cje konstantne mo"ci. Za obratovanje s "cim vi"sjim navorom pa je potrebno pravilno nastaviti "zeljene vrednosti tokov. Motor hkrati ne sme prese"ci nazivnih vrednosti napajalne napetosti in toka, saj bi se mu s tem lahko skraj"sala "zivljenska doba. 
+
+V tem delu bom predstavil razli"cne metode za dolo"canje "zeljenih vrednosti tokov.
+S programskim paketom Matlab simuliral delovanje motorja v nadnazivnih hitrostih in pri tem preizkusil nekatere metode.
 
 \section{Standardna metoda}
-Frekven"cni pretvornik pogona ima definirano napetostno in tokovno limito. Napetostna limita je odvisna od enosmerne napetosti generirane v pretvorniku.
+Napajalni pretvornik pogona ima definirano napetostno in tokovno limito. Napetostna limita je odvisna od enosmerne napetosti generirane v pretvorniku.\cite{vas}
 Zaradi omejene izhodne napetosti pretvornika je lahko maksimalna napetost:
 \begin{equation}
-u_{Sd}^2+u_{Sq}^2= U_{dc}^2
-\label{eq:napetost1}
+u_{sd}^2+u_{sq}^2= U_{smax}^2
+\label{eq:napetostna_limita_osnovna}
 \end{equation}
 
-$u_{Sd}$ in $u_{Sq}$ predstavljata vzol"zno in pre"cno komponento  napetosti v dvoosnem koordinatnem sistemu \cite{servopogoni}. Napetosti sta odvisni od pre"cne, vzdol"zne komponente toka in magnetilnega  toka (ena"cbi \ref{eq:usd}, \ref{eq:usq}). Magnetilna komponenta toka je odvisna le od vzdol"zne komponente toka (ena"cba \ref{eq:imr}).
+$u_{sd}$ in $u_{sq}$ predstavljata vzol"zno in pre"cno komponento  napetosti v dvoosnem koordinatnem sistemu. Napetosti sta odvisni od pre"cne $i_{sq}$ in vzdol"zne $i_{sd}$ komponente toka ter magnetilnega  toka $i_{mr}$ (ena"cbi \ref{eq:usd}, \ref{eq:usq}). Magnetilna komponenta toka je odvisna le od $i_{sd}$ (ena"cba \ref{eq:imr}).\cite{servopogoni}
 
 \begin{equation}
-u_{Sd}= R_S i_{Sd}+L_s' \frac{di_{Sd}}{dt}- L_s' \omega_{mr} i_{Sq}+(L_s-L_s')\frac{di_{mr}}{dt}
+u_{sd}= R_S i_{Sd}+L_s' \frac{di_{sd}}{dt}- L_s' \omega_{mr} i_{sq}+(L_s-L_s')\frac{di_{mr}}{dt}
 \label{eq:usd}
 \end{equation}
 \begin{equation}
-u_{Sq}= R_s i_{Sq}+L_s' \frac{di_{Sq}}{dt} + L_s' \omega_{mr}i_{Sd}+(L_s-L_s')\omega_{mr}i_{mr}
+u_{sq}= R_s i_{sq}+L_s' \frac{di_{sq}}{dt} + L_s' \omega_{mr}i_{sd}+(L_s-L_s')\omega_{mr}i_{mr}
 \label{eq:usq}
 \end{equation}
 
-%\begin{equation}
-%T_R\frac{di_{mr}}{dt}+i_{mr} =i_{Sd}
-%\label{eq:imr}
-%\end{equation}
+\begin{equation}
+T_R\frac{di_{mr}}{dt}+i_{mr} =i_{sd}
+\label{eq:imr}
+\end{equation}
 
 
-V stacionarnem stanju so vrednosti odvodov enaki 0. Magnetilni tok ima enako vrednost kot $i_{sd}$. Pri vi"sjih vrtilnih hitrostih postane ohmski padec napetosti zanemarljiv in ena"cbi se poenostaviti:
+V stacionarnem stanju so vrednosti odvodov enake 0. Magnetilni tok ima takrat enako vrednost kot $i_{sd}$. Pri vi"sjih vrtilnih hitrostih postane ohmski padec napetosti zanemarljiv in ena"cbi se v stacionarnem staju poenostaviti v:
 
 \begin{equation}
-u_{Sd}= - L_s' \omega_{mr} i_{Sq}
+u_{sd}= - L_s' \omega_{mr} i_{sq}
 \label{eq:usd_stat_w}
 \end{equation}
 \begin{equation}
-u_{Sq}= - L_s \omega_{mr}i_{Sd}
+u_{sq}=  L_s \omega_{mr}i_{sd}
 \label{eq:usq_stat_w}
 \end{equation}
- Ena"cbi \ref{eq:usd_stat_w} in \ref{eq:usq_stat_w} vstavimo v \ref{eq:napetost1}:
+ Ena"cbi \ref{eq:usd_stat_w} in \ref{eq:usq_stat_w} vstavimo v ena"cbo \ref{eq:napetostna_limita_osnovna}:
 
 \begin{equation}
-(L_s' \omega_{mr} i_{Sq})^2+(L_s \omega_{mr}i_{Sd})^2= U_{dc}^2
+(L_s' \omega_{mr} i_{sq})^2+(L_s \omega_{mr}i_{sd})^2= U_{smax}^2
 \label{eq:napetostnalim1}
 \end{equation}
 
-Rezultat predstavlja maksimalno vrednost statorskih tokov v dvoosnem koordinatnem sistemu, v odvistnosti od napetosti. "Ce izraz predelamo dobimo ena"cbo iz katere prepoznamo elipso: 
+Rezultat predstavlja maksimalno vrednost statorskih tokov v dvoosnem koordinatnem sistemu, v odvistnosti od napetosti. "Ce izraz nekoliko predelamo dobimo ena"cbo iz katere prepoznamo elipso: 
 
 \begin{equation}
-(\frac{i_{Sd}}{a})^2+(\frac{i_{Sq}}{b})^2 = 1
+(\frac{i_{sd}}{a})^2+(\frac{i_{sq}}{b})^2 = 1
 \label{eq:napetostnalim}
 \end{equation}
-$a$ in $b$ predstavljata pol osi elipse, $a=U_{dc}/(\omega_{mr}L_s)$, $b=U_{dc}/(\omega_{mr}L_s')$. Polosi sta funkciji vrtilne hitrosti in z nara"s"canjem hitrosti postajati manj"si.
 
-Vsak motor je konstruiran za dolo"cene pogoje in temu primerno je dolo"cen tudi nazivni tok. "Ce stroj obratuje z vi"sjim tokom kot je nazivni se bo zaradi toplotnih izgub v navitjih za"cel segrevati. S segrevanjem pa lahko deformiramo stroj ali mu s takim obratovanjem skraj"samo "zivljensko dobo. Maksimalen tok v motor je tako:
+$a$ in $b$ predstavljata pol osi elipse, $a=U_{smax}/(\omega_{mr}L_s)$, $b=U_{smax}/(\omega_{mr}L_s')$. Polosi sta funkciji vrtilne hitrosti in z nara"s"canjem hitrosti postajati manj"si.
+
+Vsak motor je konstruiran za dolo"cene pogoje in temu primerno je dolo"cen tudi nazivni tok. "Ce stroj obratuje z vi"sjim tokom kot je nazivni, se bo zaradi toplotnih izgub v navitjih za"cel segrevati. S segrevanjem se lahko stroj deformira, ali se mu z obratovanjem v takih pogojih skraj"sa "zivljenska doba. Maksimalen tok v motor je tako definiran kot:
 
 \begin{equation}
-i_{Sd}^2+i_{Sq}^2=\hat{I}_{n}^2
+i_{sd}^2+i_{sq}^2=\hat{I}_{n}^2=I_{smax}^2
 \label{eq:tokovnalim}
 \end{equation}
 
-Pogojema dolo"cenima z ena"cbama \ref{eq:napetostnalim} in \ref{eq:tokovnalim}, mora statorski tok vedno ustrezati. Ob takem obratovanju bo stroj lahko deloval celotno "zivljensko dobo.
+Pogojema dolo"cenima z ena"cbama \ref{eq:napetostnalim} in \ref{eq:tokovnalim}, mora statorski tok vedno ustrezati. Ob takem obratovanju bo stroj lahko deloval celotno "zivljensko dobo.\cite{vas}
 
-
-
-"Ce grafi"cno ponazorimo napetostno in tokovno limito nam presek mej teh limit prikazuje to"cko, ki ozna"cuje najve"cjo vrednost tokovnega vektorja (Slika \ref{fig:napetostna_tokovna_limita_slika}). V tej to"cki motor ustvari najve"cji navor Tokovna limito predstavlja kro"znica, ki je neodvisna od hitrosti. Elipsa predstavlja napetostno limito, ki je odvisna od hitrosti. Pri ni"zjih vrtilnih hitrostih sta polosi ve"cji od polmera tokovne limite(Napetostna limita za $\omega_1$ na sliki \ref{fig:napetostna_tokovna_limita_slika}), zato vpliva na tokovni vektor le tokovna limita (tokovni vektor se mora gibati znotraj zelenega kroga). Pri vi"sjih vrtilnih hitrostih se polosi elipse zmanj"sati in tokovni vektor se mora prilagoditi tudi napetostni limiti(Napetostna limita za $\omega_2$ na sliki \ref{fig:napetostna_tokovna_limita_slika}). Gibati se mora po preseku obmo"cja ki ga ozna"cujet obarvan del.
+"Ce grafi"cno ponazorimo napetostno in tokovno limito nam presek limit prikazuje to"cko, ki ozna"cuje najve"cjo vrednost $i_{sd}$ in $i_{sq}$ (Slika \ref{fig:napetostna_tokovna_limita_slika}). V tej to"cki motor ustvari najve"cji navor. Tokovna limita je ponazorjena s kro"znico, z radijem $I_{smax}$. Elipsa predstavlja napetostno limito, ki je v odvisnosti od vrtilne hitrosti spreminja. Pri ni"zjih vrtilnih hitrostih sta polosi ve"cji od polmera tokovne limite(Napetostna limita za $\omega_1$ na sliki \ref{fig:napetostna_tokovna_limita_slika}), zato vpliva na "zeljene vrednosti tokov $i_{sd}$ in $i_{sq}$ le tokovna limita (tokovni vektor se mora gibati znotraj zelenega kroga). Pri vi"sjih vrtilnih hitrostih se polosi elipse zmanj"sati in "zeljene vrednosti tokov se morajo prilagoditi tudi napetostni limiti(Napetostna limita za $\omega_2$ na sliki \ref{fig:napetostna_tokovna_limita_slika}). "Zeljeni vrednosti tokov $i_{sd}$ in $i_{sq}$ se morati prilagoditi preseku obmo"cja, ki ga ozna"cujet obarvan del.
 
 \begin{figure}
 \begin{tikzpicture}[scale=0.5]
@@ -105,38 +125,37 @@ Pogojema dolo"cenima z ena"cbama \ref{eq:napetostnalim} in \ref{eq:tokovnalim}, 
 
 %elipsa za nizke hitrosti
 \draw [red](0,0)ellipse  (4 and 10.26);
-\draw [dotted,red] (1.7,9.5)--(2,10) node[anchor=west]{Nap. limita $\omega_1 < \omega_n $};
+\draw [dotted,red,thick] (1.7,9.5)--(2,10) node[anchor=west]{Nap. limita $\omega_1 < \omega_n $};
 
 %elipsa za visoke hitrosti
-\draw [dotted,blue] (0.85,5.15)--(2.5,9) node[anchor= west]{Nap. limita $\omega_2 > \omega_n$};
+\draw [dotted,blue,thick] (0.85,5.15)--(2.5,9) node[anchor= west]{Nap. limita $\omega_2 > \omega_n$};
 \draw [blue] (0,0)ellipse (2.145 and 5.5);
 
 %tokovna limita in oznacba
 \draw [black!60!green](0,0)circle (3.5); 
-\draw [dotted,black!60!green] (3,1.8)--(4,3) node[anchor= west]{Tokovna limita};
+\draw [dotted,black!60!green,thick] (3,1.8)--(4,3) node[anchor= west]{Tokovna limita};
 
     \fill[cyan,draw=black, fill opacity=0.2] (1.79693,-3.0035) arc (-33:33.1:2.145 and 5.5)--(1.79693,3.0035)arc(59.1:180-59.1:3.5)--(-1.79693,3.0035) arc (180-33:180+33:2.145 and 5.5)--(-1.79693,-3.0035)arc(180+59.1:360-59.1:3.5);
+    \draw [<-,dotted,black!60!blue,thick] (1.79693,3.0035)--(6,5) node[anchor= south]{To"cka maks. navora pri $\omega_2$};
     
 \draw[->, thick](0,0)--(3.03,1.75);
-\draw (3,0.7) node{$\hat{I}_{Smax}$};
+\draw (3,0.7) node{$I_{smax}$};
 
 \end{tikzpicture}
-\caption{Prikaz napetostne in tokovne limite pri dveh vrtilnih hirostih}
+\caption{Prikaz napetostne in tokovne limite pri dveh razli"cnih vrtilnih hirostih}
 \label{fig:napetostna_tokovna_limita_slika}
-
 \end{figure}
 
-
-Pri vrtilnih hitrostih vi"sjih od nazivne se standardno uporablja slabljenje polja po prvi potenci. Pri tej metodi zni"zujemo vrednost magnetilnega toka v obratnem razmerju z vrtilno hitrostjo,
+Pri vrtilnih hitrostih vi"sjih od nazivne se standardno uporablja slabljenje polja po prvi potenci. Pri tej metodi se zni"zuje vrednost toka $i_{sd}$ v obratnem razmerju z vrtilno hitrostjo,
 \begin{equation}
 \label{eq:standardna_metoda}
-i_{mag}^*=i_{magn}\frac{\omega_n}{\omega_r}
+i_{sd}^*=i_{sdn}\frac{\omega_n}{\omega_r}
 \end{equation}
 
-kjer $i_{magn}$ predstavlja nazivno vrednost magnetilnega toka, $\omega_{n}$ predstavlja nazivno vrtilno hitrost in $\omega_{r}$ trenutno vrtilno hitrost rotorja. Ulomek $\frac{\omega_r}{\omega_n}$ bi lahko nadomestili tudi z vrtilno hitrostjo v p.u. sistemu. Maksimalna vrednost pre"cne komponente toka pri tej metodi dolo"ci ena"cba \ref{eq:tokovnalim}:
+kjer $i_{sdn}$ predstavlja nazivno vrednost magnetilnega toka, $\omega_{n}$ predstavlja nazivno vrtilno hitrost, ki jo ponvadi navede proizvajalec in $\omega_{r}$ trenutno vrtilno hitrost rotorja. Ulomek $\frac{\omega_r}{\omega_n}$ bi lahko nadomestili tudi z vrtilno hitrostjo v p.u. sistemu. Maksimalna vrednost $i_{sq}$ pri tej metodi dolo"ci limita iz ena"cbe \ref{eq:tokovnalim}:\cite{vas}
 
 \begin{equation}
-i_{sqmax}=\sqrt{\hat{I}_n^2-i_{sd}^{*2}}
+i_{sqmax}=\sqrt{I_{smax}^2-i_{sd}^{*2}}
 \label{maxqtok}
 \end{equation}.
 
@@ -153,65 +172,53 @@ i_{sqmax}=\sqrt{\hat{I}_n^2-i_{sd}^{*2}}
 
 
 
-V nadeljevanju sta opisani dve metodi nastavljanja "zeljene vrednosti magnetilnega toka, pri katerih je magnetna nasi"cenost zanemarjena. Prva metoda ustvari ve"cji navor v obmo"cju nad vrtilno hitrostjo. Druga metoda temelji na prvi metodi, vendar lahko ob prehodnih pojavih ustvari ve"cji navor kot prva tehnika tehnika.
+V nadeljevanju sta opisani dve tehniki nastavljanja "zeljene vrednosti vzdol"znega toka, pri katerih je magnetna nasi"cenost zanemarjena. Predpostavljamo linearno karakteristiko magnetilnice, katera je v realnosti druga"ce nelinearna. Prva tehnika (Tehnika A) ustvari ve"cji navor v obmo"cju nad vrtilno hitrostjo kot standardna. Druga (Tehnika B) temelji na prvi metodi, vendar lahko ob prehodnih pojavih ustvari ve"cji navor kot tehnika A.\cite{vas}
 
-\subsection{Prva izbolj"sana metoda}
+\subsection{Tehnika A}
+\label{sec:prva_metoda}
 
 
-
-Ob definiranem frekven"cnem pretvorniku nam ta poda makismalno vrednost izhodne napetosti in toka. Ob upo"stevanju ena"cb \ref{eq:napetostnalim}, \ref{eq:standardna_metoda} in \ref{maxqtok} lahko izrazimo vrtilno hitrost pri kateri je "se lahko nazivni magnetilni tok. Vrtilna hitrost pri kateri se poslu"zimo tehnike slabljenja polja je odvisna od parametrov frekven"cnega pretvornika, nazivnega magnetilnega toka ter statorske in stresane induktivnosti. 
+Ob definiranem napajalnem pretvorniku je podana makismalno vrednost izhodne napetosti in toka. Ob upo"stevanju ena"cb \ref{eq:napetostnalim} in \ref{maxqtok} lahko izrazimo vrtilno hitrost pri kateri je "se lahko nazivni vzdol"zni tok. Vrtilna hitrost pri kateri se poslu"zimo tehnike slabljenja polja je odvisna od parametrov napajalnega pretvornika, nazivnega vzdol"znega toka ter statorske in stresane induktivnosti. 
 
 \begin{equation}
-\omega_n=\frac{\hat{U}_{smax}}{\sqrt{i_{sdn}^{*2}(L_s^2-L_s'^2)+(L_s'\hat{I}_n)^2}}
+\omega_n=\frac{{U}_{smax}}{\sqrt{i_{sdn}^{2}(L_s^2-L_s'^2)+(L_s'I_{smax})^2}}
 \label{nazivnaw}
 \end{equation}
 
 
 
-V podro"cju slabljenja polja bo navor bolj"siod standardne metode ob upo"stevanju limit ki jih dolo"cati ena"cbi \ref{eq:napetostnalim1} in \ref{eq:tokovnalim}. 
+V podro"cju slabljenja polja bo navor vi"sji od standardne metode ob upo"stevanju limit, ki jih dolo"cati ena"cbi \ref{eq:napetostnalim} in \ref{eq:tokovnalim}. 
 
 \begin{equation}
 \label{eq:zeljentok1}
-i_{sd}^*=\sqrt{\frac{(\frac{\hat{U}_{dc}}{\omega})^2-(L_s'\hat{I}_{smax})^2}{L_s^2-L_s'^2}}
+i_{sd}^*=\sqrt{\frac{(\frac{U_{smax}}{\omega})^2-(L_s'I_{smax})^2}{L_s^2-L_s'^2}}
 \end{equation}
 
-Vrednost "zeljene vrednosti magnetilnega toka in pre"cne komponente toka glede na vrtilno hitrost v podro"cju slabljenja polja lahko razberemo iz slike \ref{fig:napetostna_tokovna_limita_slika}, v prese"ci"s"cu elipse in kro"znice. 
+Vrednost $i_{sd}^*$ glede na vrtilno hitrost v podro"cju slabljenja polja lahko razberemo iz slike \ref{fig:napetostna_tokovna_limita_slika}, v prese"ci"s"cu elipse in kro"znice. 
 
 
 
+\subsection{Tehnika B}
+\label{sec:druga_metoda}
 
-
-
-
-
-
-
-
-
-
-
-\subsection{Druga izbolj"sana metoda}
-
-
-Pri prvi metodi smo upo"stevali da je motor v stacionarnem stanju in mangetilni tok je enak vzdol"zni komponenti toka.
-Navorno ena"cbo za asinhroski motor lahko zapi"semo tudi kot:
+Pri tehniki A je upo"stevano, da je motor v stacionarnem stanju in mangetilni tok enak $i_{sd}$.
+Navorno ena"cbo za asinhroski motor se lahko zapi"se kot:\cite{servopogoni}
 \begin{equation}
 \label{eq:navor2}
-M_{el}=\frac{3}{2}p_p \frac{L_m}{L_r}|\psi_{rd}|i_{Sq}
+M_{el}=\frac{3}{2}p_p \frac{L_m}{L_r}|\psi_{rd}|i_{sq}
 \end{equation}
- pri "C
-cemer je $\psi_{r}$ predstavlja rotorski magnetni sklep. Le ta je odvisen od magnetilnega toka, ki je posledica vzdol"zne komponente statorskega toka.
+Pri "cemer $\psi_{r}$ predstavlja rotorski magnetni sklep. Le ta je odvisen od magnetilnega toka, ki je posledica $i_{sd}$.
 \begin{equation}
 \label{eq:flux}
-\psi_{rd}= \frac{L_m i_{Sd}}{1+T_r p}
+\psi_{rd}= \frac{L_m i_{sd}}{1+T_r p}
 \end{equation}
 
 kjer $p$ predstavlja operator odvajanja po "casu $p=d/dt$ in $T_r$ rotorska "casovna konstanta.
 
-Re"sitev ena"cebe \ref{eq:flux} lahko zapisemo kot:
+Re"sitev ena"cebe \ref{eq:flux} je:
 \begin{equation}
 \label{eq:Lm+delta}
-\psi_{rd}=L_m i_{Sd}+\Delta \psi_{rd}
+\psi_{rd}=L_m i_{sd}+\Delta \psi_{rd}
 \end{equation}
  kjer je
  
@@ -223,30 +230,34 @@ Re"sitev ena"cebe \ref{eq:flux} lahko zapisemo kot:
 $t_0$ predstavlja za"cetni "cas. Elektromagnetni navor je tako povi"san
 \begin{equation}
 \label{navor3}
-M_{el}=\frac{3}{2}p_p \frac{L_m}{L_r}(L_m i_{Sd}+\Delta \psi_{rd})i_{Sq}
+M_{el}=\frac{3}{2}p_p \frac{L_m}{L_r}(L_m i_{sd}+\Delta \psi_{rd})i_{sq}
 \end{equation}
 
-Ob upo"stevanju neenakosti magnetilnega toka in vzdol"zne komponente statroskega toka v ena"cbi \ref{eq:usq} in posledi"cno tudi v ena"cbi \ref{eq:napetostnalim}, lahko definiramo novo "zeljeno vrednost vzdol"zne komponente toka.
+Ob upo"stevanju neenakosti magnetilnega toka in vzdol"zne komponente statroskega toka v ena"cbi \ref{eq:usq} in posledi"cno tudi v ena"cbi \ref{eq:napetostnalim}, je "zeljena vrednost vzdol"zne komponente toka:
 \begin{equation}
 \label{eq:zeljentok2}
-i_{Sd}^*=\frac{\sqrt{(c L_s)^2+(L_s^2-L_s'^2)[(\frac{U_{dc}}{\omega})^2-L_s'^2I_{smax}^2-c^2]}-cL_s}{L_s^2-L_s'^2}
+\centering
+\begin{multlined}
+i_{sd}^*= \\ \\
+\frac{\sqrt{(c L_s)^2+d[(\frac{U_{smax}}{\omega})^2-L_s'^2I_{smax}^2-c^2]}-cL_s}{d}                 
+\end{multlined}
 \end{equation}
 \begin{equation}
-i_{sqmax}=\sqrt{\hat{I}_n^2-i_{sd}^{*2}}
+i_{sqmax}=\sqrt{I_{smax}^2-i_{sd}^{*2}}
 \end{equation}
 Pri "cemer
-$$c=\frac{L_m}{L_r}(\psi_{r}(t_0)-L_m i_{Sd}(t_0))$$
-
+$$c=\frac{L_m}{L_r}(\psi_{r}(t_0)-L_m i_{sd}(t_0))$$
+$$d=L_s^2-L_s'^2$$
+Po prehodnem pojavu (Ena"cba \ref{eq:flux}), $c$ konvergira k 0. S tem se izraz \ref{eq:zeljentok2} poenostavi v \ref{eq:zeljentok1}.\cite{vas}
 
 \section{Simulacije in uporaba tehnik}
 Simulacije sem izvedel s programskim paketom Matlab. 
-
 Za model asinhronskega motorja sem si izbral naslednje podatke:
 \begin{itemize}
 \item{$P_n=0.5$ kW}
 \item{$M_n = 2.5$ Nm}
 \item{$U_n = 15$ V}	
-\item{$I_{mrn} = 18.7$ A}
+\item{$I_{mrn}= i_{sdn} = 18.7$ A}
 \item{$I_n = 28.4$ A}
 \item{$n_N = 2200$ rpm}
 \item{$R_s = 0.074$ $\mathrm{\Omega}$}
@@ -257,22 +268,94 @@ Za model asinhronskega motorja sem si izbral naslednje podatke:
 \item{$p_p = 1$  polov par}
 \item{$J = 0.001$ kg $\mathrm{m}^2$}
 \end{itemize}
+
 Za izra"cune v simulaciji sem uporabil dvoosni koordinatni sistem v katerega sem pretvoril asinhronski motor.
 
-Simuliran napetostni pretvornik je imel omejitve napetosti in toka prilagojene nazivnim parametrom asinhronskega motorja.
-\begin{itemize}
-\item{$U_{dc}=U_{max}=U_n\sqrt{2}=21,2$ V}
-\item{$I_{max}=I_n\sqrt{2}=40,16$ A}
-\end{itemize}
+%Simuliran napetostni pretvornik je imel omejitve napetosti in toka prilagojene nazivnim parametrom asinhronskega motorja.
+%\begin{itemize}
+%\item{$U_{dc}=U_{max}=U_n\sqrt{2}=21,2$ V}
+%\item{$I_{max}=I_n\sqrt{2}=40,16$ A}
+%\end{itemize}
 
 
 
 Motor sem reguliral z neposredno FOC metodo. Limite v regulaciji sem nastavil po izrazih v \ref{eq:napetostnalim1} in \ref{eq:tokovnalim}.
-Osrednji del simulacij se je navezoval na dolo"canje vzdol"zne komponente toka. Za njeno dolo"canje sem uporabil izraza iz zgoraj teoreti"cno opisanih postopkov (ena"cba \ref{eq:zeljentok1},\ref{eq:zeljentok2}). V simulacijah sem preveril obe metodi in ocenil rezultate.
+Osrednji del simulacij se je navezoval na dolo"canje vzdol"zne komponente toka. Za njeno dolo"canje sem uporabil izraza iz zgoraj teoreti"cno opisanih postopkov (Glej poglavje \ref{sec:prva_metoda}, \ref{sec:druga_metoda}).
 
-\section{Rezultati simulacij}
+\section{Rezultati simuliranih tehnik}
+
+Pri simulaciji izbolj"sanih tehnik nisem upo"steval nelinearnosti "zeleza. Zato je vrtilna hitrost lahko nara"s"cala tudi v obmo"cju, kjer se je v realnosti potrebno poslu"ziti druge tehnike zaradi nasi"cenosti "zeleza.
+
+\subsection{Stati"cna karakteristika}
+
+Stati"cno karakteristiko sem simuliral tako, da sem "zeljeno vrednost vrtilne hitrosti linearno ve"cal. Rezultat simulacije je na sliki \ref{fig:static}.
+
+\begin{figure}
+\includegraphics[width=0.55\textwidth]{fig_static.eps}
+\label{fig:static}
+\caption{Odvisnost "zeljene vrednosti vzdol"zne komponente toka od vrtilne hitrosti}
+\end{figure}
+
+V poglavju \ref{sec:druga_metoda} je opisano, da je v stacionarnem stanju vrednost $i_{sd}^*$ enaka v obeh tehnikah. V simulaciji je manj"se odstopanje druge tehnike. Vrednost vrtilne hitrosti sem linearno vi"sal, zato se je spreminjala tudi "zeljena vrednost vzdo"zne komponente. Rotorski magnetni pretok  linearno sledi vrednosti $i_{sd}$. Konstanta $c$ tako ni 0. Izraz v \ref{eq:zeljentok2} zato ni enak \ref{eq:zeljentok1} in od tu je manj"se odstopanje.
+
+\subsection{Prehodni pojav}
+
+V naslednji simulaciji sem simuliral prehode vrtilne hitrosti. Za "zeljeno vrednost vrtilne hitrosti sem nastavljal stopni"casto funkcijo. Ob tem sem opazoval vrtilno hirost, vrednosti magnetilnega toka in potek ustvarjenega navora. Dolo"canje "zeljene vrednosti $i_{sd}$ sem nastavljal z uporabo tehnik opisanih v poglavju \ref{sec:prva_metoda} in \ref{sec:druga_metoda}.
+Potek simulacije je predstavljen na slikah \ref{fig:vrtilna}, \ref{fig:imr} in \ref{fig:Mel}. V podro"cju slabljenja polja se vrednost "zeljene vrednosti vzdol"zne komponente toka manj"sa.
+Pri "casu 0,6~s  sem se za"cel poslu"zevati tehnik primernih v podro"cju slabljenja polja. Motor v tem podro"cju lahko ustvari manj"si navor, kot ga je lahko ustvarjal v obmo"cju pod nazivno hitrostjo. Na sliki \ref{fig:Mel} se vidi kako motor v obmo"cju vi"sjih vrtilnih hitrosti ne ustvari ve"c polnega navora. Najvi"sja vrednost ustvarjenega navora pada obratno sorazmerno z vi"sanjem vrtilne hitrosti. Prehodni pojav vrtilne hitrosti zaradi manj"sega ustvarjenega navora traja dlje (Slika \ref{fig:vrtilna}).
+
+\begin{figure}
+\includegraphics[width=0.55\textwidth]{fig_vrtilna.eps}
+\caption{Potek prehodov vrtilne hitrosti}
+\label{fig:vrtilna}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.55\textwidth]{fig_imr.eps}
+\caption{Potek vrednosti magnetilnega toka}
+\label{fig:imr}
+\end{figure}
 
 
+
+\begin{figure}
+\includegraphics[width=0.55\textwidth]{fig_Mel.eps}
+\caption{Potek ustvarjenga navora}
+\label{fig:Mel}
+\end{figure}
+
+\section{Druge metode za zagotovitev maksimalnega navora}
+
+V regulaciji se nastavlja vrednosti "zeljenih tokov, vendar motor se krmili z napetostjo. Izhod regulacije je napetost, katero morje potrebno prilagoditi glede na  podro"cje delovanja. V podro"cju konstantnega navora je "zelja zagotoviti naziven magnetni pretok ($i_{sd}^*=$~konst.).
+Pre"cna in vzdol"zna komponenta napetosti sta ni"zji od maksimalne izhodne napetosti. V tem podro"cju se uporablja U/f metoda. \cite{servopogoni} Ko U/f metoda dose"ze maksimalno izhodno napetost je potrebno pre"cno komponento napetosti manj"sati (Ena"cba \ref{eq:usq}). Za ohranjanje maksimalne napetosti lahko vzdol"zno komponento napetosti povi"samo. V obratovanju z maksimalno izhondno napetostjo, se bo lahko zagotovil najve"cji navor. Slika \ref{fig:MTPA_strategy} prikazuje primer blokove sheme za zagotavljanje maksimalnega navora. Strategija je sestavljena iz dveh PI regulatorjev za dolo"canje vzdol"zne komponente toka in maksimalne vrednosti $i_{sq}$.
+
+\begin{figure}
+\includegraphics[width=0.5\textwidth]{MTPA_prva.png}
+\caption{Blokovna shema za dolo"canje vzol"zne komponente toka in maksimalne vrednosti pre"cne komponente toka\cite{MTPA}}
+\label{fig:MTPA_strategy}
+\end{figure}
+
+Regulator PI\_1 regulira vzdol"zno komponento toka in skrbi za zmanj"sevanja magnetnega pretoka v podro"cju slabljenja polja. Regulator PI\_2 skrbi, da sta vrednosti $|u_{sd}^*|$ in $u_{sq}^*$ enaki $U_{smax}/\sqrt{2}$, saj motor v tej delovni to"cki ustvari najve"cji navor.
+
+Na sliki \ref{fig:MTPA_app} je prikazan primer uporabe takega na"cina dolo"canja "zeljenih vrednosti tokov. Regulator PI\_1 je omejen z nazivno vrednostjo vzdo"zne komponente toka in uravnava vrednost toka, ko je na izhodu zahtevana maksimalna napetost. Regulator PI\_2 je v nasi"cenju ko motor obratuje v obmo"cju konstantnega navora. Maksimalna vrednost $i_{sq}$ je omejena z izrazom $\sqrt{I_{smax}^2-i_{sd}^2}$. V tem obmo"cju je maksimalna vrednost pre"cne komponente toka odvisna le od $i_{sd}$. V podro"cju slabljenja polja se za"cne "zeljena vrednost vzdol"zne komponente toka manj"sati, s tem pa se za"cne vi"sati vrednost maksimalne vrednosti pre'"cne komponente. Izhod regulatorja PI\_2 se zaradi nara"scanja absolutne vrednosti pre"cne komponente napetosti manj"sati. So"casno za"cne regulator PI\_2 siliti kon"cno izhodno napetostvzdol"zne komponente k vrednosti $U_{smax}/\sqrt{2}$. Rezultat delovanja s to strategijo je, da motor ves "cas deluje v to"cki maksimalnega navora. \cite{MTPA}
+
+
+
+\begin{figure}
+\includegraphics[width=0.55\textwidth]{MTPA.png}
+
+\caption{Blokovna shema regulacije za ustvarjanje maksimalnega navora\cite{MTPA}}
+\label{fig:MTPA_app}
+\end{figure}
+
+\section{Zaklju"cek}
+
+Predstavil sem regulacijo motorja v podro"cju slabljenja polja. Opisal sem osnovno metodo, kako nastavljati "zeljeno vrednost vzdol"zne komponente toka. Predstavil sem tudi izbolj"sani tehniki, s katerima lahko motor ustvari vi"sji navor v obmo"cju nad nazivno hitrostjo. Simuliral sem poteke nastavljanje vzdol"zne komponente toka glede na "zeljeno vrtilno hitrost. Na koncu sem predstavil "se metodo, katera napaja motor tako, da vedno deluje v to"cki najve"cjega ustvarjenega navora.
+
+Vrtenje motorja v nadnazivnih hitrostih nam omogo"ca ve"cji razpon "zeljene vrtilne hitrosti. Z uporabo primernih tehnik lahko v "sirokem obmo"cju vrtilne hitrosti dose"zemo maksimalen navor. S tem delom sem prikazal, da se lahko v obmo"cju nad nazivno hitrostjo obratuje dobro. S primerno metodo se da "se zvi"sati ustvarjen navor. Metodo katero se bo uporabilo v pogonu, je nato odvisno le od na"crtovalca.
+
+
+%V prehodnem pojavu razlike niso velike. Izbolj"sana metoda pa se izka"ze pri ustvarjanju navora. Pri simulirani vrtilni hitrosti je lahko regulacija motorja z izbolj"sano metodo ustvarila tudi do 30\% vi"sji navor kot standardna metoda.
 
 %
 %
@@ -327,10 +410,14 @@ Osrednji del simulacij se je navezoval na dolo"canje vzdol"zne komponente toka. 
 
 \bibitem[1]{servopogoni}V.~Ambro"zi"c, P.~Zajec, {\em Elektri"cni servo pogoni}, \hskip 1em plus 0.5em minus 0.4em \relax Slovensko zdru"zenje elektroenergetikov CIGR\'E-CIRED, 2016
 
-\bibitem[2]{vas} P.~Vas, {\em Sensorless Vector and Direct Torque Control}, \hskip 1em plus 0.5em minus 0.4em \relax Oxford University Press, pp 632--641, 1998
+\bibitem[2]{miljavc}P.~Jereb, D.~Miljavec, {\em Elektri"cni  stroji: temeljna znanja}, \hskip 1em plus 0.5em minus 0.4em \relax Fakulteta za elektrotehniko, Ljubljana, 2014
+
+\bibitem[3]{vas} P.~Vas, {\em Sensorless Vector and Direct Torque Control}, \hskip 1em plus 0.5em minus 0.4em \relax Oxford University Press, pp 632--641, 1998
 
 
-\bibitem[3]{pogoni}R.~Fi"ser, {\em Pogonski sistemi z elektromotorji}
+\bibitem[4]{MTPA}Y.~Xu, C.~Shen , H.~Hui and Z.~Huang, {\em Field Weakening Strategy in a Wide Speed Range of
+Induction Motors for Electric Vehicles Based on
+Maximum Torque Control}\hskip 1em plus 0.5em minus 0.4em \relax Power Electronics and Application Conference and Exposition, p. 740, 2014 
 \end{thebibliography}
 
 
