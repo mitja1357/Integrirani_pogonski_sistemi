@@ -5,8 +5,10 @@
 \usepackage[T1]{fontenc}
 \usepackage{sty/EVrevija}
 \usepackage{graphicx}
+\usepackage{siunitx}
 \usepackage{tikz}
 \usepackage{mathtools}
+\usepackage{amsmath}
 \usepackage[affil-it]{authblk}
 \graphicspath{{./Slike/}}
 \begin{document}
@@ -54,6 +56,47 @@ V nadnazivnih hitrostih za"cne pogon omejevati napetostna zmo"znost napajalnega 
 
 V tem delu bom predstavil razli"cne metode za dolo"canje "zeljenih vrednosti tokov.
 S programskim paketom Matlab simuliral delovanje motorja v nadnazivnih hitrostih in pri tem preizkusil nekatere metode.
+\section{Koordinatni sistem polja}
+
+Teorija orientacije polja je bila prvi"c objavljena v sedemdesetih letih prej"snjega stoletja in velja danes kot prevladujo"ce orodje za regulacijo servo pogonov, ki ni omejena le na asinhronske motorje. Napetosti, tokove in magnetne sklepe posameznih faz lahko v stroju opi"semo s prostorskim vektorjem posamezne koli"cine. 
+%Prostorsko umestitev faznih koli"cin dose"zemo z matri"cnim mno"zenjem.
+
+%$$\begin{bmatrix}
+%u_a\\u_b\\u_0
+%\end{bmatrix}=
+%\frac{2}{3}
+%\begin{bmatrix} 1 & -\frac{1}{2} & -\frac{1}{2} \\ 0 & \frac{\sqrt{3}}{2} & -\frac{\sqrt{3}}{2}\\ \frac{1}{2} &\frac{1}{2} &\frac{1}{2} \end{bmatrix}\cdot
+%\begin{bmatrix}
+%u_{1}\\u_{2}\\u_{3}
+%\end{bmatrix}$$
+%
+%Transformacija je prikazana na primeru napetosti velja pa tudi za prostorski vektor toka in magnetnega sklepa.
+Iz Kirchhoffovih zakonov sledi \begin{equation}
+\sum_{n=1}^3 i_n(t)=0
+\end{equation} prav tako za napetosti \begin{equation}
+\sum_{n=1}^3 u_n(t)=0
+\end{equation}
+
+
+
+Prostorski vektor je vektorska vsota faznih koli"cin, ki so v medsebojno zamaknjene za kot  $\gamma=2 \pi/3$. Prostorsko umestitev faznih veli"cin dose"zemo tako, da njihove skalarne vrednosti mno"zimo s tremi kompleksnimi konstantami$$e^{j n \gamma}=\cos n \gamma +j \sin n \gamma,$$ kjer je n = \{0,1,2\}. Prostorsko ume"s"ceni vektorji posameznih faz so definirani kot
+$$\textbf{i}_1(t)=i_1(t) e^{j 0} $$ 
+$$\textbf{i}_2(t)=i_2(t) e^{j \frac{2\pi}{3}} $$ 
+$$\textbf{i}_3(t)=i_3(t) e^{j \frac{4\pi}{3}} $$
+Skupni u"cinek vseh tokov zdru"zimo v rezultanti toka. Ob upo"stevanju Kirchhoffovega in Eulerjevega izreka velja naslednja relacija
+
+\begin{equation}
+\begin{multlined}
+{i}(t)= c (\textbf{i}_1(t)+\textbf{i}_2(t)+\textbf{i}_3(t))=\\
+ = \underbrace{c \frac{3}{2}i_1(t)}_{\mathrm{Re}{[\textbf{i}(t)]}}+j \underbrace{c \frac{\sqrt{3}}{2}(i_2(t)-i_3(t))}_{\mathrm{Im}{[\textbf{i}(t)]}}= \\
+  = i_a(t)+j\:i_b(t)\qquad \qquad \qquad\qquad\quad
+  \end{multlined}
+\end{equation}
+
+
+
+
+
 
 \section{Standardna metoda}
 Napajalni pretvornik pogona ima definirano napetostno in tokovno limito. Napetostna limita je odvisna od napetosti enosmernega pretvornika.\cite{vas}
@@ -251,21 +294,29 @@ Po prehodnem pojavu (Ena"cba (\ref{eq:flux})), $c$ konvergira k 0. S tem se izra
 \section{Simulacije in uporaba tehnik}
 Simulacije sem izvedel s programskim paketom Matlab. 
 Za model asinhronskega motorja sem si izbral naslednje podatke:
-\begin{itemize}
-\item{$P_n=0.5$ kW}
-\item{$M_n = 2.5$ Nm}
-\item{$U_n = 15$ V}	
-\item{$I_{mrn}= i_{sdn} = 18.7$ A}
-\item{$I_n = 28.4$ A}
-\item{$n_N = 2200$ rpm}
-\item{$R_s = 0.074$ $\mathrm{\Omega}$}
-\item{$R_r = 0.0513$ $\mathrm{\Omega}$}
-\item{$L_s = 2.596$ mH}
-\item{$L_r = 2.559$ mH}
-\item{$L_m = 2.4$ mH}
-\item{$p_p = 1$  polov par}
-\item{$J = 0.001$ kg $\mathrm{m}^2$}
-\end{itemize}
+\begin{table}
+\centering
+\label{tab:nazivni_podatki_motorja}
+\caption{Nazivni podatki simuliranega motorja}
+\begin{tabular}{|c|c|}
+\hline
+	$P_n$		&0.5 kW \\\hline
+	$M_n$		&2,5 Nm \\\hline
+	$U_n$		&	15 V\\\hline
+	$I_{mrn}= i_{sdn}$&	18,7 A\\\hline
+	$I_n $		&	28,4 A\\\hline
+	$n_N $		&	2200 rpm\\\hline
+	$R_s$		&	0.074 $\mathrm{\Omega}$\\\hline
+	$R_r$		&	0.0513 $\mathrm{\Omega}$\\\hline
+	$L_s $		&	2.596 mH\\\hline
+	$L_r $		&	2.559 mH\\\hline
+	$L_m $		&	2.4 mH\\\hline
+	$p_p $		& 	1 polov par	\\\hline
+	$J$			&	0,001 kg $\mathrm{m}^2$	\\\hline										
+\end{tabular}
+\end{table}
+
+
 
 Za izra"cune v simulaciji sem uporabil dvoosni koordinatni sistem, v katerega sem pretvoril asinhronski motor.
 
