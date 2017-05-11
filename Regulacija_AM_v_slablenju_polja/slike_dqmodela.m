@@ -8,7 +8,7 @@ k=60/2/pi;
 
 duration=1.45;
 options=simset('FixedStep','1e-5','SrcWorkspace','base','DstWorkspace','base');
-set_param('dq_model', 'SolverName','VariableStepAuto');
+%set_param('dq_model', 'SolverName','VariableStepAuto');
 sim('dq_model', [0,duration],options);
 
 
@@ -19,7 +19,7 @@ plot(time,w_fdb_A*k)
 plot(time,w_fdb_B*k)
 plot(time,w_ref*k)
 grid on
-xlabel('cas / s');
+xlabel('čas / s');
 ylabel('vrtilna hitrost / obrati min^{-1}');
 legend('Tehnika A','Tehnika B','Referenca','Location','southeast')
 
@@ -29,7 +29,7 @@ hold on
 plot(time,I_mr_A)
 plot(time,I_mr_B)
 grid on
-xlabel('cas / s');
+xlabel('čas / s');
 ylabel('I_{mr} / A');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -41,7 +41,7 @@ plot(time,M_el_A)
 plot(time,M_el_B)
 % plot(time,M_el_s)
 grid on
-xlabel('cas / s');
+xlabel('čas / s');
 ylabel('M_{el} / Nm');
 legend('Tehnika A','Tehnika B','Location','northeast')
 
@@ -52,7 +52,7 @@ plot(time,M_max_A)
 plot(time,M_max_B)
 % plot(time,M_max_s)
 grid on
-xlabel('cas / s');
+xlabel('čas / s');
 ylabel('M_{el max} / Nm');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -62,7 +62,7 @@ hold on
 plot(time,I_mr_Aref)
 plot(time,I_mr_Bref)
 grid on
-xlabel('cas / s');
+xlabel('čas / s');
 ylabel('I_{mr} / A');
 legend('Tehnika A','Tehnika B','Location','southeast')
 

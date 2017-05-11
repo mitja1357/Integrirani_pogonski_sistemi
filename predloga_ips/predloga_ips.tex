@@ -56,7 +56,7 @@ V nadnazivnih hitrostih za"cne pogon omejevati napetostna zmo"znost napajalnega 
 
 V tem delu bom predstavil razli"cne metode za dolo"canje "zeljenih vrednosti tokov.
 S programskim paketom Matlab simuliral delovanje motorja v nadnazivnih hitrostih in pri tem preizkusil nekatere metode.
-\section{Koordinatni sistem polja}
+\section{Pretvorba v koordinatni sistem polja}
 
 Teorija orientacije polja je bila prvi"c objavljena v sedemdesetih letih prej"snjega stoletja in velja danes kot prevladujo"ce orodje za regulacijo servo pogonov, ki ni omejena le na asinhronske motorje. Napetosti, tokove in magnetne sklepe posameznih faz lahko v stroju opi"semo s prostorskim vektorjem posamezne koli"cine. 
 %Prostorsko umestitev faznih koli"cin dose"zemo z matri"cnim mno"zenjem.
@@ -87,14 +87,58 @@ Skupni u"cinek vseh tokov zdru"zimo v rezultanti toka. Ob upo"stevanju Kirchhoff
 
 \begin{equation}
 \begin{multlined}
-{i}(t)= c (\textbf{i}_1(t)+\textbf{i}_2(t)+\textbf{i}_3(t))=\\
+{\textbf{i}_s}(t)= c (\textbf{i}_1(t)+\textbf{i}_2(t)+\textbf{i}_3(t))=\\
  = \underbrace{c \frac{3}{2}i_1(t)}_{\mathrm{Re}{[\textbf{i}(t)]}}+j \underbrace{c \frac{\sqrt{3}}{2}(i_2(t)-i_3(t))}_{\mathrm{Im}{[\textbf{i}(t)]}}= \\
-  = i_a(t)+j\:i_b(t)\qquad \qquad \qquad\qquad\quad
+  = i_{sa}(t)+j\:i_{sb}(t)\qquad \qquad \qquad\qquad\quad
   \end{multlined}
 \end{equation}
+Koordinatni sistem rotorskega polja je usmerjen v smeri vektorja rotorskega fluksa oz. magnetilnega toka. 
+Vektor $\textbf{i}_s(t)$ je potrebno projecirati v sistem rotorskega polja. To opravimo z matri"cnim mno"zenjem.
+\begin{equation}
+\begin{bmatrix}
+i_{sd}\\i_{sq}
+\end{bmatrix}=
+\begin{bmatrix}
+\cos \rho& \sin \rho\\ -\sin\rho &\cos \rho
+\end{bmatrix}
+\begin{bmatrix}
+i_{sa}\\i_{sb}
+\end{bmatrix}
+\end{equation}
+
+Kot $\rho$ je kot magnetilnega toka rotorja, ki se vrti s sinhronsko hitrostjo. Definiran je kot
+
+\begin{equation}
+\rho=\int (\omega_{sl}+p_p \omega_m)\mathrm{d}t
+\end{equation}
+Kjer $\omega_{sl}$ predstavlja slipno kro"zno frekvenco, $\omega_m$ mehansko vrtilno hitrost  in $p_p$ polove pare.
+
+S temi transformacijami se tok kot tudi napetost in rotorski magnetni pretok pretvori v sistem, ki se ga obravna kot reguliranje enosmernega motorja.
 
 
+V  znani enofazni nadomestni shemi asinhronskega stroja, pozanamo stresani induktivnosti $L_{\sigma s}$, $L_{\sigma r}$ in glavno induktivnost, ki jo ozna"cimo z $L_m$. Te induktivnosti izhajajo iz statorske $L_s$ in rotorske $L_r$ induktivnosti.
+\begin{equation}
+L_s=L_{\sigma s}+L_m
+\end{equation}
+\begin{equation}
+L_r=L_{\sigma r}+L_m
+\end{equation}
+Stresani induktivnosti lahko opi"semo tudi s faktorji stresanja.
+\begin{equation}
+L_{\sigma s}= \sigma_sL_m
+\end{equation}
+\begin{equation}
+L_{\sigma r}= \sigma_rL_m
+\end{equation}
 
+Vpeljimo faktor skupnega stresanja
+\begin{equation}
+\sigma=1-\frac{1}{(1+\sigma_s)(1+\sigma_r)}=1-\frac{L_m^2}{L_sL_r}
+\end{equation}
+S  tem faktorjem lahko definiramo tranzientno induktivnost statorskega navitja, ki nastopa v  izpeljanih napetostnih ena"cbah.
+\begin{equation}
+L'_s=\sigma L_s= L_s- \frac{L_m^2}{L_r}
+\end{equation}
 
 
 
@@ -106,7 +150,7 @@ u_{sd}^2+u_{sq}^2= U_{smax}^2
 \label{eq:napetostna_limita_osnovna}
 \end{equation}
 
-$u_{sd}$ in $u_{sq}$ predstavljata vzdol"zno in pre"cno komponento  napetosti v dvoosnem koordinatnem sistemu. Napetosti sta odvisni od pre"cne $i_{sq}$ in vzdol"zne $i_{sd}$ komponente toka ter magnetilnega  toka $i_{mr}$ (ena"cbi \ref{eq:usd}, \ref{eq:usq}). Magnetilna komponenta toka je odvisna le od $i_{sd}$ (\ref{eq:imr}).\cite{servopogoni}
+$u_{sd}$ in $u_{sq}$ predstavljata vzdol"zno in pre"cno komponento  napetosti v dvoosnem koordinatnem sistemu. Napetosti sta odvisni od pre"cne $i_{sq}$ in vzdol"zne $i_{sd}$ komponente toka ter magnetilnega  toka $i_{mr}$ (ena"cbi \ref{eq:usd}, \ref{eq:usq}). Magnetilna komponenta toka je odvisna le od $i_{sd}$ (\ref{eq:imr}). Magnetilna komponenta se na $i_{sd}$ odziva, kot "clen prvega reda s "casovno rotorsko konstanto ki je razmerje  med rotorsko induktivnostjo in rotorsko upornostjo.\cite{servopogoni}
 
 \begin{equation}
 u_{sd}= R_s i_{sd}+L_s' \frac{di_{sd}}{dt}- L_s' \omega_{mr} i_{sq}+(L_s-L_s')\frac{di_{mr}}{dt}
@@ -118,8 +162,12 @@ u_{sq}= R_s i_{sq}+L_s' \frac{di_{sq}}{dt} + L_s' \omega_{mr}i_{sd}+(L_s-L_s')\o
 \end{equation}
 
 \begin{equation}
-T_R\frac{di_{mr}}{dt}+i_{mr} =i_{sd}
+T_r\frac{di_{mr}}{dt}+i_{mr} =i_{sd}
 \label{eq:imr}
+\end{equation}
+\begin{equation}
+T_r=\frac{L_r}{R_r}
+\label{eq:Tr}
 \end{equation}
 
 
