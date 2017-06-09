@@ -10,6 +10,7 @@ clear arrayB
 i=1;
 a=a1;
 b=b1;
+wn=2200;
 zeljenehitrosti=[floor(wn*30/pi),6000,7000];
 
 

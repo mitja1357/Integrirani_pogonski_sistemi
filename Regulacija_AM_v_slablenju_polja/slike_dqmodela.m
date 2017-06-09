@@ -19,8 +19,8 @@ plot(time,w_fdb_A*k)
 plot(time,w_fdb_B*k)
 plot(time,w_ref*k)
 grid on
-xlabel('ƒças / s');
-ylabel('vrtilna hitrost / obrati min^{-1}');
+xlabel('Ëas / s');
+ylabel('vrtilna hitrost /min^{-1}');
 legend('Tehnika A','Tehnika B','Referenca','Location','southeast')
 
 figure('Name','Imr','NumberTitle','off')
@@ -29,7 +29,7 @@ hold on
 plot(time,I_mr_A)
 plot(time,I_mr_B)
 grid on
-xlabel('ƒças / s');
+xlabel('Ëas / s');
 ylabel('I_{mr} / A');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -41,7 +41,7 @@ plot(time,M_el_A)
 plot(time,M_el_B)
 % plot(time,M_el_s)
 grid on
-xlabel('ƒças / s');
+xlabel('Ëas / s');
 ylabel('M_{el} / Nm');
 legend('Tehnika A','Tehnika B','Location','northeast')
 
@@ -52,7 +52,7 @@ plot(time,M_max_A)
 plot(time,M_max_B)
 % plot(time,M_max_s)
 grid on
-xlabel('ƒças / s');
+xlabel('Ëas / s');
 ylabel('M_{el max} / Nm');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -62,7 +62,7 @@ hold on
 plot(time,I_mr_Aref)
 plot(time,I_mr_Bref)
 grid on
-xlabel('ƒças / s');
+xlabel('Ëas / s');
 ylabel('I_{mr} / A');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -83,7 +83,7 @@ hold on
 plot(w_fdb_A(st:stop)*k,I_mr_A(st:stop))
 plot(w_fdb_B(st:stop)*k,I_mr_B(st:stop))
 grid on
-xlabel('vrtilna hitrost / obrati min^{-1}');
+xlabel('vrtilna hitrost /min^{-1}');
 ylabel('I_{mr} / A');
 legend('Tehnika A','Tehnika B','Location','northeast')
 
@@ -104,7 +104,7 @@ hold on
 plot(time,M_el_A)
 plot(time,M_el_B)
 grid on
-xlabel('cas / s');
+xlabel('Ëas / s');
 ylabel('M_{el} / Nm');
 legend('Tehnika A','Tehnika B','Location','northeast')
 
@@ -114,7 +114,7 @@ hold on
 plot(time,M_max_A)
 plot(time,M_max_B)
 grid on
-xlabel('cas / s');
+xlabel('Ëas / s');
 ylabel('M_{el max} / Nm');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -124,7 +124,7 @@ hold on
 plot(w_fdb_A(st:end)*k,u_A(st:end))
 plot(w_fdb_B(st:end)*k,u_B(st:end))
 grid on
-xlabel('cas / s');
+xlabel('Ëas / s');
 ylabel('napetost /V');
 legend('Tehnika A','Tehnika B','Location','southeast')
 
@@ -140,7 +140,7 @@ hold on
 plot(w_fdb_A(st:end)*k,abstokA(st:end))
 plot(w_fdb_B(st:end)*k,abstokA(st:end))
 grid on
-xlabel('cas / s');
+xlabel('Ëas / s');
 ylabel('napetost /V');
 legend('Tehnika A','Tehnika B','Location','southeast')
 %}
